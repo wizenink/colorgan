@@ -117,7 +117,7 @@ class Trainer:
 
 
 
-    def train(self,batch_size = 16,epochs = 100,sample_interval=1,files=r'C:\lin\train\flower'):
+    def train(self,batch_size = 16,epochs = 100,sample_interval=1,files=r'C:\lin\train\flower',store="models/"):
         #(x_train,y_train),(x_test,y_test) = self.get_data()
         #num_examples = x_train.shape[0]
         #num_batches = int(num_examples/ float(batch_size))
@@ -202,13 +202,16 @@ class Trainer:
                 #self.d_loss_a.append(d_loss[0])
                 #self.gan_loss_a.append(g_loss)
                 if (epoch % sample_interval == 0) and (batch == 0):
-                    self.gan.discriminator.save(f"models/d_{epoch}.h5")
-                    self.gan.generator.save(f"models/g_{epoch}.h5")
-                    self.gan.gan.save(f"models/gan_{epoch}.h5")
+                    dpath = os.path.join(store,f"d_{epoch}.h5")
+                    gpath = os.path.join(store,f"g_{epoch}.h5")
+                    ganpath = os.path.join(store,f"gan_{epoch}.h5")
+                    self.gan.discriminator.save(dpath)
+                    self.gan.generator.save(gpath)
+                    self.gan.gan.save(ganpath)
                     ridx = np.random.randint(0,fake_x.shape[0],1)
                     rand = fake_x[ridx[0]]
                     self.sample_images(self.gan,epoch,rand,text,True)
-                    self.plot_metrics(epoch)
+                    #self.plot_metrics(epoch)
             print()
 
 
@@ -222,13 +225,13 @@ class Trainer:
         plt.close()
 
     def sample_images(self,gan,epoch,rand,text,telegram = True,phase=''):
-        noise = gen_noise(1,shape=(rand.shape[0],rand.shape[1]))
-        imgs = gan.generator.predict([noise,np.expand_dims(rand,axis=0)])
-        yuv = np.concatenate((rand,imgs[0]),axis=2)
-        rgb = LAB2RGB(yuv)
-        scipy.misc.imsave(f"images/{phase}_{epoch}.png",rgb)
-        photo = open(f"images/{phase}_{epoch}.png", 'rb')
-        send_photo(rgb)
+        #noise = gen_noise(1,shape=(rand.shape[0],rand.shape[1]))
+        #imgs = gan.generator.predict([noise,np.expand_dims(rand,axis=0)])
+        #yuv = np.concatenate((rand,imgs[0]),axis=2)
+        #rgb = LAB2RGB(yuv)
+        #scipy.misc.imsave(f"images/{phase}_{epoch}.png",rgb)
+        #photo = open(f"images/{phase}_{epoch}.png", 'rb')
+        #send_photo(rgb)
         send_message(text)
         
 
