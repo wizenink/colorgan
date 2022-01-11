@@ -1,6 +1,6 @@
 import telebot
-TOKEN = '711538635:AAFzf5TcOfMgsNO_jHWy2OxK3mzoNPCqDcs'
-CHATID = 9403251
+TOKEN = ''
+CHATID = 0
 enabled = True
 tb = telebot.TeleBot(TOKEN)
 
